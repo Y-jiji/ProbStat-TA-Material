@@ -1,0 +1,61 @@
+digraph G {
+    fontname="YouYuan,Helvetica,Arial,sans-serif"
+    node [fontname="YouYuan,Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    label = "{ 概率统计知识地图 }";
+
+    subgraph cluster_core_skill {
+        label = "统计学素养";
+        color = "lightgrey";
+        style = "filled";
+        node [color="block", style="filled", fontcolor="white"]
+        core_modeling   [label="概率建模"];
+        core_proofing   [label="数学证明"];
+        core_describing [label="数据描述"];
+        core_simulation [label="计算模拟"];
+    }
+    core_simulation -> prelim_python
+
+    subgraph cluster_underlying {
+        label = "超纲知识";
+        color = pink;
+        fontcolor="grey";
+        shape="dot";
+        node [color="lightgrey", fontcolor="grey"]
+        underlying_msr_thry     [label="测度的\n概念"];
+        underlying_bc_lemma     [label="Borel-Cantelli\n 引理"];
+        underlying_fn_series    [label="函数项级数"];
+        underlying_manifold     [label="流形与外微分形式"];
+    }
+
+    subgraph cluster_chp_0_prelim {
+        label = "第〇章:预备知识";
+        color = red;
+        prelim_multivar_diff    [label="多元函数\n求导"];
+        prelim_series           [label="级数"];
+        prelim_matrix_diff      [label="矩阵微分"];
+        prelim_python           [label="python\n编程基础"];
+    }
+    prelim_matrix_diff -> underlying_manifold;
+    prelim_multivar_diff -> underlying_fn_series;
+    prelim_matrix_diff -> prelim_multivar_diff;
+
+    subgraph cluster_chp_1_probability_space {
+        label = "第一章:概率空间";
+        color = red;
+        sp_ajbr_event           [label="σ代数和\n随机事件的概率"];
+    }
+    sp_ajbr_event -> underlying_msr_thry;
+
+    subgraph cluster_chp_6 {
+        color = red;
+        label = "第六章:统计量";
+    }
+
+    subgraph cluster_chp_7 {
+        color = red;
+        label = "第七章:假设检验";
+        hypo_test_definition [label="假设检验\n的定义"];
+        hypo_test_stu_t_test [label="t-检验"];
+    }
+}
