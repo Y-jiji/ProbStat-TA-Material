@@ -1,61 +1,253 @@
 digraph G {
     fontname="YouYuan,Helvetica,Arial,sans-serif"
+    fontsize="40";
+    ratio="1";
     node [fontname="YouYuan,Helvetica,Arial,sans-serif"]
     edge [fontname="Helvetica,Arial,sans-serif"]
     label = "{ 概率统计知识地图 }";
 
-    subgraph cluster_core_skill {
-        label = "统计学素养";
-        color = "lightgrey";
-        style = "filled";
-        node [color="block", style="filled", fontcolor="white"]
-        core_modeling   [label="概率建模"];
-        core_proofing   [label="数学证明"];
-        core_describing [label="数据描述"];
-        core_simulation [label="计算模拟"];
-    }
-    core_simulation -> prelim_python
+    // subgraph cluster_core_skill {
+    //     fontsize = "24";
+    //     label = "统计学素养";
+    //     color = "lightgrey";
+    //     style = "filled";
+    //     node [color="black", style="filled", fontcolor="white"]
+    //     core_modeling   [label="概率建模"];
+    //     core_proofing   [label="数学证明"];
+    //     core_describing [label="数据描述"];
+    //     core_simulation [label="计算模拟"];
+    //     core_simulation -> prelim_python
+    //     core_proofing -> rv_distr;
+    // }
 
     subgraph cluster_underlying {
+        fontsize = "24";
         label = "超纲知识";
         color = pink;
         fontcolor="grey";
         shape="dot";
         node [color="lightgrey", fontcolor="grey"]
         underlying_msr_thry     [label="测度的\n概念"];
+        underlying_borel_ajbr   [label="Borel代数的概念"];
         underlying_bc_lemma     [label="Borel-Cantelli\n 引理"];
         underlying_fn_series    [label="函数项级数"];
         underlying_manifold     [label="流形与外微分形式"];
     }
 
     subgraph cluster_chp_0_prelim {
+        fontsize = "24";
         label = "第〇章:预备知识";
         color = red;
         prelim_multivar_diff    [label="多元函数\n求导"];
         prelim_series           [label="级数"];
         prelim_matrix_diff      [label="矩阵微分"];
         prelim_python           [label="python\n编程基础"];
+        prelim_matrix_diff -> underlying_manifold;
+        prelim_multivar_diff -> underlying_fn_series;
+        prelim_matrix_diff -> prelim_multivar_diff;
     }
-    prelim_matrix_diff -> underlying_manifold;
-    prelim_multivar_diff -> underlying_fn_series;
-    prelim_matrix_diff -> prelim_multivar_diff;
 
     subgraph cluster_chp_1_probability_space {
+        fontsize = "24";
         label = "第一章:概率空间";
         color = red;
         sp_ajbr_event           [label="σ代数和\n随机事件的概率"];
+        sp_cond                 [label="条件概率的概念"];
+        sp_indep                [label="独立性"];
+        sp_ajbr_event -> underlying_msr_thry;
+        sp_ajbr_event -> underlying_borel_ajbr;
+        sp_cond       -> sp_ajbr_event;
+        sp_indep      -> sp_ajbr_event;
     }
-    sp_ajbr_event -> underlying_msr_thry;
 
-    subgraph cluster_chp_6 {
+    subgraph cluster_chp_2_randvar_dist {
+        fontsize = "24";
+        label = "第二章:随机变量与其分布";
         color = red;
-        label = "第六章:统计量";
+        rv_def                  [label="随机变量"];
+        rv_distr                [label="分布"];
+        rv_expectation          [label="期望和其运算性质"];
+        rv_transform            [label="随机变量的\n变换"];
+        rv_def -> sp_ajbr_event;
+        rv_distr -> sp_ajbr_event;
+        rv_distr -> rv_def;
+        rv_expectation -> rv_distr;
+        rv_transform -> rv_distr;
+        rv_transform -> underlying_manifold;
+        subgraph cluster_rv_distributions {
+            label = "常见分布";
+            color = "pink";
+            rv_dist_gamm           [label="Gamma", color="#f9fff9", style="filled"];
+            rv_dist_beta           [label="Beta",  color="#f9fff9", style="filled"];
+            rv_dist_norm           [label="正态",  color="#f9fff9", style="filled"];
+            rv_dist_poiss          [label="Poisson", color="#f9f9ff", style="filled"];
+            rv_dist_geom           [label="几何", color="#f9f9ff", style="filled"];
+            rv_dist_hgeo           [label="超几何", color="#f9f9ff", style="filled"];
+            rv_dist_bino           [label="二项", color="#f9f9ff", style="filled"];
+            rv_dist_nbin           [label="负二项", color="#f9f9ff", style="filled"];
+            rv_dist_gamm           -> rv_distr;
+            rv_dist_beta           -> rv_distr;
+            rv_dist_norm           -> rv_distr;
+            rv_dist_poiss          -> rv_distr;
+            rv_dist_geom           -> rv_distr;
+            rv_dist_hgeo           -> rv_distr;
+            rv_dist_bino           -> rv_distr;
+            rv_dist_nbin           -> rv_distr;
+        }
     }
 
-    subgraph cluster_chp_7 {
+    subgraph cluster_chp_3_multivariate {
+        fontsize = "24";
+        label = "第三章:多维随机变量与其分布";
+        color = red;
+        mrv_def                  [label="多维随机变量"];
+        mrv_distr                [label="联合分布"];
+        mrv_margin               [label="边缘分布"];
+        mrv_cond                 [label="条件分布"];
+        mrv_indep                [label="随机变量的独立性"];
+        mrv_transform            [label="多维随机变量的\n变换"];
+        mrv_def -> rv_def;
+        mrv_distr -> mrv_def;
+        mrv_margin -> mrv_distr;
+        mrv_cond -> mrv_distr;
+        mrv_indep -> sp_indep;
+        mrv_transform -> mrv_def;
+        mrv_transform -> mrv_distr;
+        mrv_transform -> prelim_multivar_diff;
+        subgraph cluster_mrv_distributions {
+            label = "常见多维分布";
+            color = "pink";
+            mrv_dist_norm           [label="多维正态", color="#f9fff9", style="filled"];
+            mrv_dist_dirc           [label="Dirichlet分布", color="#fafafa", style="filled"];
+            mrv_dist_dirc -> rv_dist_beta;
+            mrv_dist_norm -> rv_dist_norm;
+        }
+    }
+
+    subgraph cluster_chp_4_lln_clt {
+        fontsize = "24";
+        label = "第四章:大数定律和中心极限定理"
+        color = red;
+        seq_ae_converge              [label="几乎处处收敛"]
+        seq_distr_converge           [label="依分布收敛"]
+        lln_khinchin             [label="Khinchin大数定律"]
+        lln_weak                 [label="弱大数定律"]
+        clt_char_fn              [label="分布的特征函数", color="grey", fontcolor="grey"]
+        clt_levy                 [label="Lindeberg–Lévy大数定律"]
+        clt_lyap                 [label="Lyapunov大数定律", color="grey", fontcolor="grey"]
+        clt_lind                 [label="Lindeberg大数定律", color="grey", fontcolor="grey"]
+        seq_ae_converge -> rv_def;
+        seq_distr_converge -> rv_def;
+        seq_distr_converge -> prelim_series;
+        lln_khinchin -> seq_distr_converge;
+        lln_khinchin -> underlying_bc_lemma;
+        lln_weak -> rv_expectation;
+        clt_levy -> clt_char_fn;
+        clt_levy -> rv_dist_norm;
+        clt_levy -> seq_distr_converge;
+        clt_lind -> clt_char_fn;
+        clt_lyap -> clt_levy;
+    }
+
+    subgraph cluster_chp_5_stat {
+        fontsize = "24";
+        color = red;
+        label = "第五章:统计量与其分布";
+        stat_sampling          [label="总体和样本"]
+        stat_descriptive       [label="描述性统计"]
+        stat_stat              [label="统计量与其分布"]
+        stat_distr             [label="常见抽样分布"]
+        stat_sufficient        [label="充分统计量"]
+        stat_descriptive -> rv_expectation;
+        stat_stat -> rv_distr;
+        stat_stat -> rv_def;
+        stat_distr -> mrv_dist_norm;
+        stat_sufficient -> mrv_distr;
+        stat_sampling -> rv_distr;
+        subgraph cluster_stat_dist {
+            label = "常见抽样分布";
+            color = "pink";
+            stat_chi_square [label="卡方分布", color="#f9fff9"]
+            stat_f          [label="f分布", color="#f9fff9"]
+            stat_student_t  [label="学生t分布", color="#f9fff9"]
+        }
+        stat_chi_square -> stat_distr;
+        stat_f -> stat_distr;
+        stat_student_t -> stat_distr;
+        stat_chi_square -> mrv_dist_norm;
+        stat_chi_square -> rv_dist_gamm;
+        stat_f -> mrv_dist_norm;
+        stat_f -> rv_dist_beta;
+        stat_student_t -> mrv_dist_norm;
+    }
+
+    subgraph cluster_chp_6_param {
+        fontsize = "24";
+        color = red;
+        label = "第六章:参数估计";
+        subgraph cluster_freq {
+            label="频率学派";
+            color="pink";
+            param_est_def_freq [label="参数估计问题:频率描述"];
+            param_est_mmtm [label="矩估计方法"]
+            param_est_mle  [label="极大似然估计方法(MLE)"]
+            param_est_latent_em   [label="边缘分布的MLE, EM算法"]
+            param_est_interv      [label="区间估计"]
+            param_est_def_freq -> rv_distr;
+            param_est_def_freq -> mrv_distr;
+            param_est_mmtm -> param_est_def_freq;
+            param_est_mmtm -> mrv_distr;
+            param_est_mmtm -> mrv_transform;
+            param_est_mle -> mrv_distr;
+            param_est_mle -> param_est_def_freq;
+            param_est_interv -> param_est_def_freq;
+            param_est_latent_em -> mrv_margin;
+            param_est_latent_em -> prelim_python;
+            subgraph cluster_param_est_prop {
+                label="描述估计方法的性质";
+                color="pink";
+                param_est_nobias [label="无偏性"]
+                param_est_match  [label="相合性"]
+                param_est_variance [label="方差描述"]
+                param_est_min_variance [label="最小方差的无偏估计"]
+                param_est_variance -> rv_expectation;
+                param_est_nobias -> rv_expectation;
+                param_est_match -> rv_expectation;
+                param_est_match -> rv_expectation;
+                param_est_min_variance -> param_est_nobias;
+                param_est_min_variance -> param_est_variance;
+            }
+        }
+        subgraph cluster_bayesian {
+            label="Bayesian方法";
+            color="pink";
+            param_est_def_bayesian [label="参数估计问题:Bayesian描述"]
+            param_est_bayesian [label="Bayesian方法"]
+            param_est_bayesian -> sp_cond;
+            param_est_def_bayesian -> sp_cond;
+            param_est_bayesian -> mrv_cond;
+            param_est_bayesian -> param_est_def_bayesian;
+        }
+    }
+
+    subgraph cluster_chp_7_hypo {
+        fontsize = "24";
         color = red;
         label = "第七章:假设检验";
-        hypo_test_definition [label="假设检验\n的定义"];
-        hypo_test_stu_t_test [label="t-检验"];
+        hypo_test_def [label="假设检验问题"];
+        hypo_test_def -> param_est_interv;
+        subgraph cluster_hypo_norm {
+            color = pink;
+            label = "正态总体假设检验";
+            hypo_test_f          [label="F检验"];
+            hypo_test_chi_square [label="卡方检验"];
+            hypo_test_stu_t      [label="二样本独立t检验"];
+            hypo_test_f -> hypo_test_def;
+            hypo_test_chi_square -> hypo_test_def;
+            hypo_test_stu_t -> hypo_test_def;
+            hypo_test_f -> stat_f;
+            hypo_test_stu_t -> stat_student_t;
+            hypo_test_chi_square -> stat_chi_square;
+        }
     }
 }
